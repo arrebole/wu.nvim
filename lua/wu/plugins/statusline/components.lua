@@ -40,7 +40,7 @@ function M.mode(ctx)
   local mode = vim.api.nvim_get_mode().mode
   local entry = MODES[mode:sub(1, 2)] or MODES[mode:sub(1, 1)] or MODES.n
   local color = ctx.palette.modes[entry[2]]
-  return { { " │ " .. entry[1] .. " ", fg = color } }
+  return { { " ┃ " .. entry[1] .. " ", fg = color } }
 end
 
 -- 分支信息来自 gitsigns：优先当前 buffer，其次工作目录所在仓库。
