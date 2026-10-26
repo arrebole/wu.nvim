@@ -19,4 +19,4 @@ for _, buf in ipairs(vim.api.nvim_list_bufs()) do
   end
 end
 
-require("plugins.indentscope.indentscope").setup(require("plugins.indentscope.config"))
+require("wu.plugins.indentscope.indentscope").setup(require("wu.plugins.indentscope.config"))

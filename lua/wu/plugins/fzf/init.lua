@@ -1,6 +1,6 @@
 local M = {}
-local terminal = require("plugins.float-terminal")
-local files = require("plugins.files")
+local terminal = require("wu.plugins.float-terminal")
+local files = require("wu.plugins.files")
 local options, scan
 
 function M.close()

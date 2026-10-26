@@ -11,4 +11,4 @@ if vim.fn.has("win32") == 1 and vim.o.shellcmdflag == "/s /c"
   vim.o.shellquote = ""
   vim.o.shellxquote = ""
 end
-require("toggleterm").setup(require("plugins.toggleterm.config"))
+require("toggleterm").setup(require("wu.plugins.toggleterm.config"))

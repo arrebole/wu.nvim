@@ -6,4 +6,4 @@ vim.pack.add({
   "https://github.com/nvim-tree/nvim-web-devicons",
 })
 
-require("bufferline").setup(require("plugins.bufferline.config"))
+require("bufferline").setup(require("wu.plugins.bufferline.config"))

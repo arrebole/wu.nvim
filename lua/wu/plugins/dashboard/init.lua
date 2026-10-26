@@ -2,7 +2,7 @@
 local M = {}
 local api = vim.api
 local ns = api.nvim_create_namespace("LocalDashboard")
-local history = require("plugins.dashboard.history")
+local history = require("wu.plugins.dashboard.history")
 local options, state, stdin_seen
 local window_options = {
   number = false, relativenumber = false, signcolumn = "no", foldcolumn = "0",
@@ -57,7 +57,7 @@ function M.open_directory(path)
   end
   api.nvim_cmd({ cmd = "cd", args = { path }, magic = { file = false } }, {})
   history.remember(path)
-  require("plugins.yazi").open(path)
+  require("wu.plugins.yazi").open(path)
 end
 
 local function render()
@@ -128,7 +128,7 @@ function M.open()
     if win ~= -1 then api.nvim_set_current_win(win); return end
   end
   local previous = api.nvim_get_current_buf()
-  local win = require("plugins.files").editor()
+  local win = require("wu.plugins.files").editor()
   local buf = api.nvim_create_buf(false, true)
   state = { buf = buf, windows = {}, rows = {}, selected = 1 }
   vim.bo[buf].bufhidden = "wipe"

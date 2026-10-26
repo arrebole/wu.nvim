@@ -8,4 +8,4 @@ vim.o.laststatus = 3
 vim.o.showcmd = false
 vim.o.wildmode = "full"
 
-require("noice").setup(require("plugins.noice.config"))
+require("noice").setup(require("wu.plugins.noice.config"))

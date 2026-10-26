@@ -22,17 +22,17 @@ vim.keymap.set("n", "<leader>gg", "<Cmd>LazyGit<CR>", { desc = "打开 LazyGit" 
 vim.keymap.set("n", "<leader>gG", "<Cmd>LazyGitCurrentFile<CR>", { desc = "打开当前文件的 Git 仓库" })
 vim.keymap.set("n", "<leader>gl", "<Cmd>LazyGitLog<CR>", { desc = "查看仓库提交历史" })
 vim.keymap.set("n", "<leader>gf", "<Cmd>LazyGitFilterCurrentFile<CR>", { desc = "查看当前文件历史" })
-vim.keymap.set("n", "<C-g>", function() require("plugins.lazygit").toggle() end, { desc = "切换 LazyGit" })
+vim.keymap.set("n", "<C-g>", function() require("wu.plugins.lazygit").toggle() end, { desc = "切换 LazyGit" })
 
 -- 按顶部标签栏的顺序切换 buffer。
 vim.keymap.set("n", "[b", function()
-  require("plugins.bufferline.navigation").cycle(-1)
+  require("wu.plugins.bufferline.navigation").cycle(-1)
 end, {
   silent = true,
   desc = "切换到上一个 buffer",
 })
 vim.keymap.set("n", "]b", function()
-  require("plugins.bufferline.navigation").cycle(1)
+  require("wu.plugins.bufferline.navigation").cycle(1)
 end, {
   silent = true,
   desc = "切换到下一个 buffer",

@@ -14,14 +14,14 @@ return {
       return not unused or #vim.fn.win_findbuf(bufnr) > 0
     end,
     left_mouse_command = function(bufnr)
-      require("plugins.bufferline.navigation").open(bufnr)
+      require("wu.plugins.bufferline.navigation").open(bufnr)
     end,
     -- 关闭标签时保留编辑窗口和焦点，同时保护未保存的修改。
     close_command = function(bufnr)
-      require("plugins.bufferline.navigation").close(bufnr)
+      require("wu.plugins.bufferline.navigation").close(bufnr)
     end,
     right_mouse_command = function(bufnr)
-      require("plugins.bufferline.navigation").close(bufnr)
+      require("wu.plugins.bufferline.navigation").close(bufnr)
     end,
   },
 }
