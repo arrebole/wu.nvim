@@ -172,13 +172,14 @@ local function sidebar()
   end
 end
 
--- 文件树上方的区域：显示树的根目录名，末尾用分隔线接上窗口边框。
+-- 文件树上方的区域：显示居中的 Explorer 标题，末尾用分隔线接上窗口边框。
 local function offset()
   local win = sidebar()
   if not win then return { text = "", width = 0 } end
   local width = api.nvim_win_get_width(win)
-  local root = vim.fn.fnamemodify(vim.fn.getcwd(win), ":t")
-  local title = vim.fn.strcharpart(" " .. root, 0, width)
+  local label = "Explorer"
+  local left = math.max(0, math.floor((width - api.nvim_strwidth(label)) / 2))
+  local title = (" "):rep(left) .. vim.fn.strcharpart(label, 0, width - left)
   local fill = width - api.nvim_strwidth(title)
   return {
     text = hl(colors.muted, true) .. escape(title) .. hl(colors.text) .. (" "):rep(fill)
