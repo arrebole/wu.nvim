@@ -12,7 +12,10 @@ return {
       ["h"] = "close_node",
     },
   },
-
+  sources = {
+    "filesystem",
+    "git_status",
+  },
   filesystem = {
     filtered_items = {
       -- 默认会隐藏点文件，并在目录末尾追加 "N hidden items"。
