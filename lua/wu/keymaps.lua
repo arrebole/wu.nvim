@@ -26,13 +26,13 @@ vim.keymap.set("n", "<C-g>", function() require("wu.plugins.lazygit").toggle() e
 
 -- 按顶部标签栏的顺序切换 buffer。
 vim.keymap.set("n", "[b", function()
-  require("wu.plugins.bufferline.navigation").cycle(-1)
+  require("wu.plugins.tabline.buffers").cycle(-1)
 end, {
   silent = true,
   desc = "切换到上一个 buffer",
 })
 vim.keymap.set("n", "]b", function()
-  require("wu.plugins.bufferline.navigation").cycle(1)
+  require("wu.plugins.tabline.buffers").cycle(1)
 end, {
   silent = true,
   desc = "切换到下一个 buffer",
