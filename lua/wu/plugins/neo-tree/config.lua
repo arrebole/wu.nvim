@@ -12,9 +12,14 @@ return {
       ["h"] = "close_node",
     },
   },
-  sources = {
-    "filesystem",
-    "git_status",
+  -- 在文件树顶部显示来源切换栏，文件树和 Git 改动树都可以直接切换。
+  source_selector = {
+    winbar = true,
+    tabs_layout = "center",
+    sources = {
+      { source = "filesystem" },
+      { source = "git_status" },
+    },
   },
   filesystem = {
     filtered_items = {
