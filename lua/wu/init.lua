@@ -11,7 +11,7 @@ function M.setup(opts)
   require("wu.settings")
 
   -- 插件与本地实现。
-  require("wu.plugins.yazi.setup")
+  require("wu.plugins.neo-tree.setup")
   require("wu.plugins.fzf.setup")
   require("wu.plugins.smear-cursor.setup")
   require("wu.plugins.indentscope.setup")

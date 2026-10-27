@@ -16,12 +16,31 @@ local function highlights()
   end
 end
 
-local function restore()
-  if not state then return end
-  if state.chrome then
+local function show_chrome()
+  if state and state.chrome then
     vim.o.laststatus, vim.o.showtabline = state.chrome.laststatus, state.chrome.showtabline
     state.chrome = nil
   end
+end
+
+-- 启动面板独占屏幕时隐藏标签栏与状态栏；与文件树等窗口并排时保留，
+-- 这样焦点在窗口间切换不会让布局上下跳动。
+local function sync_chrome()
+  if not state then return end
+  local win = vim.fn.bufwinid(state.buf)
+  local editors = vim.tbl_filter(function(w)
+    return api.nvim_win_get_config(w).relative == ""
+  end, api.nvim_tabpage_list_wins(0))
+  if win == -1 or #editors > 1 then return show_chrome() end
+  if not state.chrome then
+    state.chrome = { laststatus = vim.o.laststatus, showtabline = vim.o.showtabline }
+    vim.o.laststatus, vim.o.showtabline = 0, 0
+  end
+end
+
+local function restore()
+  if not state then return end
+  show_chrome()
   for win, saved in pairs(state.windows) do
     if api.nvim_win_is_valid(win) then
       for name, value in pairs(saved) do vim.wo[win][name] = value end
@@ -31,8 +50,7 @@ local function restore()
 end
 
 local function decorate(win)
-  if not state.chrome then state.chrome = { laststatus = vim.o.laststatus, showtabline = vim.o.showtabline } end
-  vim.o.laststatus, vim.o.showtabline = 0, 0
+  sync_chrome()
   if not state.windows[win] then
     local saved = {}
     for name in pairs(window_options) do saved[name] = vim.wo[win][name] end
@@ -57,7 +75,7 @@ function M.open_directory(path)
   end
   api.nvim_cmd({ cmd = "cd", args = { path }, magic = { file = false } }, {})
   history.remember(path)
-  require("wu.plugins.yazi").open(path)
+  require("wu.plugins.neo-tree").open(path)
 end
 
 local function render()
@@ -183,11 +201,16 @@ function M.setup(opts)
       M.open()
     end)
   end })
-  api.nvim_create_autocmd({ "BufLeave", "BufWinLeave" }, { group = group, callback = function(event)
+  -- 只在面板离开或进入窗口时还原、装饰窗口选项；单纯的焦点切换不处理。
+  api.nvim_create_autocmd("BufWinLeave", { group = group, callback = function(event)
     if state and event.buf == state.buf then restore() end
   end })
-  api.nvim_create_autocmd("BufEnter", { group = group, callback = function(event)
+  api.nvim_create_autocmd("BufWinEnter", { group = group, callback = function(event)
     if state and event.buf == state.buf then decorate(api.nvim_get_current_win()); render() end
+  end })
+  -- 窗口增减或切换工作空间后，重新判断面板是否独占屏幕；WinClosed 时窗口尚未移除，延后处理。
+  api.nvim_create_autocmd({ "WinNew", "WinClosed", "TabEnter" }, { group = group, callback = function()
+    vim.schedule(sync_chrome)
   end })
   api.nvim_create_autocmd("BufWipeout", { group = group, callback = function(event)
     if state and event.buf == state.buf then restore(); state = nil end
@@ -201,10 +224,6 @@ function M.setup(opts)
     if #api.nvim_list_uis() > 0 and vim.bo[event.buf].buftype == "" and vim.fn.filereadable(event.file) == 1 then
       history.remember(history.project(event.file))
     end
-  end })
-  api.nvim_create_autocmd("User", { group = group, pattern = "LocalDirectoryOpened", callback = function(event)
-    history.remember(event.data.path)
-    render()
   end })
   api.nvim_create_autocmd("ColorScheme", { group = group, callback = function() highlights(); render() end })
 end

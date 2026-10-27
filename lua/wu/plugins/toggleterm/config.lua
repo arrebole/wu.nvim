@@ -16,7 +16,7 @@ return {
   },
   on_open = function(term)
     vim.b[term.bufnr].miniindentscope_disable = true
-    -- 只绑定 ToggleTerm buffer，避免影响 Yazi、fzf 和 LazyGit。
+    -- 只绑定 ToggleTerm buffer，避免影响 fzf 和 LazyGit。
     vim.keymap.set({ "n", "t" }, "<C-q>", function() term:close() end,
       { buffer = term.bufnr, desc = "隐藏终端（保留进程）" })
     vim.keymap.set("n", "q", function() term:close() end,

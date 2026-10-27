@@ -1,4 +1,4 @@
--- Yazi/fzf 共用的浮动终端：负责窗口和进程生命周期，业务结果由调用方读取。
+-- fzf 使用的浮动终端：负责窗口和进程生命周期，业务结果由调用方读取。
 local M = {}
 local api = vim.api
 local sessions = {}

@@ -6,7 +6,7 @@ vim.opt.runtimepath:prepend(plugin_dir)
 local group = vim.api.nvim_create_augroup("LocalIndentscope", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
   group = group,
-  pattern = { "yazi", "fzf", "lazygit", "cmdpal" },
+  pattern = { "neo-tree", "fzf", "lazygit", "cmdpal" },
   callback = function(event)
     vim.b[event.buf].miniindentscope_disable = true
   end,
@@ -14,7 +14,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- 兼容重新加载配置时已有的工具窗口。
 for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-  if vim.tbl_contains({ "yazi", "fzf", "lazygit", "cmdpal" }, vim.bo[buf].filetype) then
+  if vim.tbl_contains({ "neo-tree", "fzf", "lazygit", "cmdpal" }, vim.bo[buf].filetype) then
     vim.b[buf].miniindentscope_disable = true
   end
 end
