@@ -44,12 +44,8 @@ function M.list()
   return unique(paths)
 end
 
-function M.remember(path)
-  path = directory(path)
-  if not path then return end
-  local paths = { path }
-  vim.list_extend(paths, M.list())
-  paths = unique(paths)
+-- 把目录列表写回记录文件；remember 和面板上的删除都走这里。
+function M.save(paths)
   vim.fn.mkdir(vim.fs.dirname(history_file), "p")
   local pending = history_file .. "." .. vim.fn.getpid() .. ".tmp"
   local ok, err = pcall(function()
@@ -60,6 +56,19 @@ function M.remember(path)
     vim.fn.delete(pending)
     vim.notify("无法保存最近目录：" .. tostring(err), vim.log.levels.WARN)
   end
+end
+
+function M.remember(path)
+  path = directory(path)
+  if not path then return end
+  local paths = { path }
+  vim.list_extend(paths, M.list())
+  M.save(unique(paths))
+end
+
+-- 从记录里删掉一个目录。
+function M.forget(path)
+  M.save(vim.tbl_filter(function(item) return item ~= path end, M.list()))
 end
 
 return M
