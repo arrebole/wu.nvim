@@ -190,7 +190,7 @@ local function build(width, height)
     add()
   end
   local total = count < #paths and ("%d / %d"):format(count, #paths) or tostring(#paths)
-  add(justify({ "最近打开的目录", "DashboardSection" }, { total, "DashboardMuted" }, width))
+  add(justify({ "Recent", "DashboardSection" }, { total, "DashboardMuted" }, width))
   add({ { ("─"):rep(width), "DashboardRule" } })
   add()
   for i = 1, count do add(entry(i, paths[i], width)) end
@@ -349,27 +349,6 @@ function M.open()
   end
 end
 
--- nvim <目录> 启动时 neo-tree 接管目录 buffer，打开侧边文件树并在编辑区留下一个空白文件。
--- 文件树打开后用启动面板替换这个空白文件，焦点留在文件树。
-local function beside_tree()
-  local function place()
-    local tree = api.nvim_get_current_win()
-    local win = require("wu.plugins.files").editor()
-    if not blank(api.nvim_win_get_buf(win)) then return end
-    M.open()
-    if vim.bo[api.nvim_win_get_buf(tree)].filetype == "neo-tree" then api.nvim_set_current_win(tree) end
-  end
-  for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
-    if vim.bo[api.nvim_win_get_buf(win)].filetype == "neo-tree" then return place() end
-  end
-  require("neo-tree.events").subscribe({
-    event = "neo_tree_window_after_open",
-    id = "wu-dashboard-beside-tree",
-    once = true,
-    handler = function() vim.schedule(place) end,
-  })
-end
-
 function M.setup(opts)
   options = vim.tbl_extend("force", defaults, opts or {})
   history.setup(options.history_file)
@@ -387,7 +366,8 @@ function M.setup(opts)
         elseif vim.v.this_session ~= "" then history.remember(vim.fn.getcwd()) end
       end
       if stdin_seen or #api.nvim_list_uis() == 0 or vim.v.this_session ~= "" then return end
-      if vim.fn.argc() == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1 then return beside_tree() end
+      -- 目录启动交给 neo-tree，在当前窗口打开文件树，不显示面板。
+      if vim.fn.argc() == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1 then return end
       if vim.fn.argc() ~= 0 or #api.nvim_list_wins() ~= 1 or not blank(0) then return end
       M.open()
     end)

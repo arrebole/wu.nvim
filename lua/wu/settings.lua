@@ -9,7 +9,8 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4   
 -- 编辑时按 Tab、退格按 4 格处理
 vim.opt.softtabstop = 4  
-
+-- 自动更新缓冲区文件
+vim.opt.autoread = true
 -- 不自动生成 XXX~ 的备份文件
 vim.opt.backup = false
 -- 所有模式都支持鼠标
@@ -24,14 +25,6 @@ vim.opt.number = true
 vim.opt.cursorline = true
 -- 真彩色（文件浏览器的图标与高亮需要）
 vim.opt.termguicolors = true
--- 浮动窗口轻度透明
-vim.opt.winblend = 10  
--- 弹出菜单轻度透明
-vim.opt.pumblend = 10
 -- 无行号不显示 ~
 vim.opt.fillchars = { eob = " " }
-
--- 背景透明
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-vim.api.nvim_set_hl(0, "NonText", { bg = "none" })
+-- 背景透明与浮窗透明度由主题统一设置，见 plugins/theme。

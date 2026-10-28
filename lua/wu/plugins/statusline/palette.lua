@@ -1,4 +1,4 @@
--- 状态栏调色板：从当前配色方案取色，切换主题后重新计算。
+-- 状态栏与标签栏调色板：使用 wu 主题时直接取主题色；换成其他配色方案时从高亮组推算。
 local M = {}
 
 local function get(name, attr)
@@ -20,7 +20,30 @@ local function blend(fg, bg, alpha)
   return rgb
 end
 
+local function themed()
+  local theme = require("wu.plugins.theme")
+  local c = theme.palette
+  return {
+    bar = theme.options().transparent and "NONE" or c.bg,
+    text = c.fg,
+    base = c.bg,
+    muted = c.muted,
+    faint = c.faint,
+    modes = {
+      normal = c.blue,
+      insert = c.green,
+      visual = c.purple,
+      replace = c.red,
+      command = c.yellow,
+      terminal = c.teal,
+    },
+    diagnostics = { error = c.red, warn = c.yellow, info = c.blue, hint = c.teal },
+  }
+end
+
 function M.resolve()
+  if require("wu.plugins.theme").active() then return themed() end
+
   local dark = vim.o.background == "dark"
   local normal_bg = get("Normal", "bg")
   local bg = normal_bg or (dark and 0x1e1e2e or 0xeff1f5)

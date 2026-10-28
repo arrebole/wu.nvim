@@ -7,8 +7,15 @@ local M = {}
 function M.setup(opts)
   opts = opts or {}
 
+  -- 禁用 netrw，让 neo-tree 接管目录入口；必须在 BufEnter 触发前完成。
+  vim.g.loaded_netrw = 1
+  vim.g.loaded_netrwPlugin = 1
+
   -- 偏好配置，必须在插件与快捷键之前加载。
   require("wu.settings")
+
+  -- 主题先于插件加载：插件用 default 定义的高亮不会覆盖主题。
+  require("wu.plugins.theme.setup")
 
   -- 插件与本地实现。
   require("wu.plugins.neo-tree.setup")

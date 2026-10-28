@@ -7,13 +7,18 @@ vim.pack.add({
 
 require("neo-tree").setup(require("wu.plugins.neo-tree.config"))
 
--- 文件树右侧的分隔线归文件树窗口所有，经 winhighlight 映射到 NeoTreeWinSeparator。
--- 默认链接到 WinSeparator（默认主题下为正文色，过亮），这里改用固定颜色，切换主题后重新设置。
-local function separator()
-  vim.api.nvim_set_hl(0, "NeoTreeWinSeparator", { fg = "#4a4c60", bg = "NONE" })
-end
-separator()
-vim.api.nvim_create_autocmd("ColorScheme", {
-  group = vim.api.nvim_create_augroup("LocalNeoTreeSeparator", { clear = true }),
-  callback = separator,
+-- 文件树右侧的分隔线归文件树窗口所有：在文件树窗口里把竖线字符换成空格，
+-- 这一列的颜色（NeoTreeWinSeparator）由主题设为文件树底色，看起来像文件树的右边距。
+require("neo-tree.events").subscribe({
+  event = "neo_tree_window_after_open",
+  id = "wu-neo-tree-separator",
+  handler = function(args)
+    local win = args and args.winid
+    if not (win and vim.api.nvim_win_is_valid(win)) then return end
+    local chars = vim.opt.fillchars:get()
+    for _, name in ipairs({ "vert", "vertleft", "vertright", "verthoriz" }) do chars[name] = " " end
+    local items = {}
+    for name, char in pairs(chars) do items[#items + 1] = name .. ":" .. char end
+    vim.wo[win].fillchars = table.concat(items, ",")
+  end,
 })
