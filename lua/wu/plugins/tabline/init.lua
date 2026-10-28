@@ -172,7 +172,7 @@ local function sidebar()
   end
 end
 
--- 文件树上方的区域：显示居中的 Explorer 标题，末尾用分隔线接上窗口边框。
+-- 文件树上方的区域：显示居中的 Explorer 标题，末尾用分隔线接上窗口边框（与文件树分隔线同色）。
 local function offset()
   local win = sidebar()
   if not win then return { text = "", width = 0 } end
@@ -183,7 +183,7 @@ local function offset()
   local fill = width - api.nvim_strwidth(title)
   return {
     text = hl(colors.muted, true) .. escape(title) .. hl(colors.text) .. (" "):rep(fill)
-      .. hl(colors.faint) .. "│",
+      .. hl(vim.g.wu_neo_tree_separator or colors.faint) .. "│",
     width = width + 1,
   }
 end

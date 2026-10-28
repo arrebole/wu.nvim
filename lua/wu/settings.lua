@@ -2,9 +2,6 @@
 -- 在加载插件和快捷键之前设置 leader。
 vim.g.mapleader = " "
 
--- Neo-tree 与编辑区之间的固定分隔线颜色，不跟随主题变化。
-vim.g.wu_neo_tree_separator = "#4a4c60"
-
 -- tab键默认4格子
 -- Tab 字符显示为 4 格
 vim.opt.tabstop = 4      
